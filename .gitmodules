@@ -1,0 +1,6 @@
+[submodule "Jenkins/docker"]
+	path = Jenkins/docker
+	url = https://github.com/jenkinsci/docker.git
+[submodule "Sonarqube/docker-sonarqube"]
+	path = Sonarqube/docker-sonarqube
+	url = https://github.com/SonarSource/docker-sonarqube.git
