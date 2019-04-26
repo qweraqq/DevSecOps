@@ -4,3 +4,9 @@
 [submodule "Sonarqube/docker-sonarqube"]
 	path = Sonarqube/docker-sonarqube
 	url = https://github.com/SonarSource/docker-sonarqube.git
+[submodule "DependencyCheck/DependencyCheck"]
+	path = DependencyCheck/DependencyCheck
+	url = https://github.com/jeremylong/DependencyCheck.git
+[submodule "DependencyCheck/dependency-check-plugin"]
+	path = DependencyCheck/dependency-check-plugin
+	url = https://github.com/jenkinsci/dependency-check-plugin

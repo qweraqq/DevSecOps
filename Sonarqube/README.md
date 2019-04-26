@@ -1,6 +1,17 @@
 # Sonarqube
 
+## 说明
+Sonarqube官方Docker镜像中缺少一些插件
+
+创建了基于官方docker镜像的Sonarqube-with-plugins的dockerfile
+
+Dockerfile持续更新中
+
+
 ## 使用方式
+```docker run -d -p 9000:9000 qweraqq/sonarqube```
+
+或者
 ```docker run -d -p 9000:9000 sonarqube:lts```
 
 注意:
