@@ -1,6 +1,6 @@
 # DevSecOps
 
-## 在Jenkins中调用Owasp DependencyCheck,Sonarqube,Spotbugs
+## 在Jenkins中实现自动化安全检测
 解决两大类实际问题：
 1. 使用DependencyCheck检查通用型组件的已知漏洞
 2. 使用Sonarqube + SpotBugs进行静态代码扫描
@@ -37,7 +37,16 @@
 - 需要勾选在Advanced中勾选```Generate optional HTML report```以及```Generate optional vulnerability report (HTML)```，否则sonarqube只有结果无具体报告
 - 需要在sonar的配置中指定dependencyCheck的报告路径
 
-#### TODO: spotbugs
+#### spotbugs的find-sec-bugs插件
+Spotbugs[https://spotbugs.github.io/](https://spotbugs.github.io/)是findbugs[http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)的后续版本。
+
+与Sonarqube相比，Spotbugs仅针对JAVA程序。
+
+find-sec-bugs插件[https://find-sec-bugs.github.io/](https://find-sec-bugs.github.io/)
+- 安装只需要在Sonarqube market中安装Findbugs插件，并在规则中启用find-sec-bugs即可
+- 可以参考[https://www.jianshu.com/p/23cd241739ed](https://www.jianshu.com/p/23cd241739ed)
+
+
 #### Sonarqube 6.7.x(LTS)版本实测相关配置及结果
 
 ![Jenkins中的配置](./screenshots/jenkins_settings.jpg "Jenkins中的配置")
@@ -51,15 +60,17 @@
 # unique project identifier (required)
 sonar.projectKey=${JOB_NAME}
 
+# project metadata (used to be required, optional since SonarQube 6.1)
+sonar.projectName=${JOB_NAME}
+sonar.projectVersion=${BUILD_NUMBER}
+
 # path to source directories (required)
 sonar.sources=src/main
 
-# path to binaries (required)
+# path to Java project compiled classes (*required*)
 sonar.java.binaries=target/classes  
 
 # dependency check
 sonar.dependencyCheck.reportPath=${WORKSPACE}/dependency-check-report.xml
 sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 ```
-
-
