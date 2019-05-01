@@ -10,3 +10,6 @@
 [submodule "DependencyCheck/dependency-check-plugin"]
 	path = DependencyCheck/dependency-check-plugin
 	url = https://github.com/jenkinsci/dependency-check-plugin
+[submodule "ArcherySec/archerysec"]
+	path = ArcherySec/archerysec
+	url = https://github.com/archerysec/archerysec.git

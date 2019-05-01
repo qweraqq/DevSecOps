@@ -46,3 +46,16 @@ Docker自身的安全设计可以参考Docker官网上的这篇文章[https://do
 	- TUF [https://github.com/theupdateframework/tuf](https://github.com/theupdateframework/tuf)
 3. 基础设施的系统配置检查
 	- Docker Bench for Security: [https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security)
+
+
+# Docker使用中遇到的一些问题
+1. 已知的网络访问BUG：docker+防火墙的bug。docker无法访问本地宿主机网络中的服务(比如数据库)，必须在防火墙设置规则
+[https://forums.docker.com/t/no-route-to-host-network-request-from-container-to-host-ip-port-published-from-other-container/39063/5](https://forums.docker.com/t/no-route-to-host-network-request-from-container-to-host-ip-port-published-from-other-container/39063/5)
+
+ip地址修改为本地docker的网卡地址
+```
+ <rule family="ipv4">
+     <source address="172.17.0.1/16"/>
+     <accept/>
+ </rule>
+ ```
