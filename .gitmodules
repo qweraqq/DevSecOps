@@ -13,3 +13,6 @@
 [submodule "ArcherySec/archerysec"]
 	path = ArcherySec/archerysec
 	url = https://github.com/archerysec/archerysec.git
+[submodule "cve-search/cve-search"]
+	path = cve-search/cve-search
+	url = https://github.com/cve-search/cve-search.git
