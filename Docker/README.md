@@ -61,7 +61,7 @@ arminc维护了clair所需要的数据库(arminc/clair-db)并且根据官方不�
 启动clair-local-scan，docker hub地址为[https://hub.docker.com/r/arminc/clair-local-scan](https://hub.docker.com/r/arminc/clair-local-scan)
 ```bash
 docker run -d --name db arminc/clair-db:latest
-docker run -p 6060:6060 --link db:postgres -d --name clair rminc/clair-local-scan:latest
+docker run -p 6060:6060 --link db:postgres -d --name clair arminc/clair-local-scan:latest
 ```
 
 下载clair-scanner的二进制包[https://github.com/arminc/clair-scanner/releases](https://github.com/arminc/clair-scanner/releases)并运行扫描
@@ -69,7 +69,8 @@ docker run -p 6060:6060 --link db:postgres -d --name clair rminc/clair-local-sca
 wget https://github.com/arminc/clair-scanner/releases/download/v12/clair-scanner_linux_amd64
 mv clair-scanner_linux_amd64 clair-scanner
 chmod +x clair-scanner
-clair-scanner DOCKER_IAMGE_NAME example-clair-scanner.yaml http://YOUR_LOCAL_IP:6060 YOUR_LOCAL_IP
+./clair-scanner --ip=YOUR_LOCAL_IP DOCKER_IAMGE_NAME
+# EXAMPLE: ./clair-scanner --ip=127.0.0.1 -r result.json qweraqq/jenkins-with-maven:lts
 ```
 
 
