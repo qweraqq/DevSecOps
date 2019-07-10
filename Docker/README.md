@@ -47,6 +47,33 @@ Docker自身的安全设计可以参考Docker官网上的这篇文章[https://do
 3. 基础设施的系统配置检查
 	- Docker Bench for Security: [https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security)
 
+# CORES clair
+clair的部署架构为C/S
+	- POSTGRES数据库服务,用于漏洞信息存储,数据源可以参考[https://github.com/coreos/clair/blob/master/Documentation/drivers-and-data-sources.md](https://github.com/coreos/clair/blob/master/Documentation/drivers-and-data-sources.md)
+	- server端接收client端发送的layer信息并比对数据库
+	- client调用server端的服务并进行结果展示
+	
+
+
+##### 使用[arminc/clair-local-scan](https://github.com/arminc/clair-local-scan)进行本地Docker镜像扫描
+arminc维护了clair所需要的数据库(arminc/clair-db)并且根据官方不再维护的[analyze-local-images](https://github.com/coreos/analyze-local-images.git)开发了[clair-scanner](https://github.com/arminc/clair-scanner)
+
+启动clair-local-scan，docker hub地址为[https://hub.docker.com/r/arminc/clair-local-scan](https://hub.docker.com/r/arminc/clair-local-scan)
+```bash
+docker run -d --name db arminc/clair-db:latest
+docker run -p 6060:6060 --link db:postgres -d --name clair rminc/clair-local-scan:latest
+```
+
+下载clair-scanner的二进制包[https://github.com/arminc/clair-scanner/releases](https://github.com/arminc/clair-scanner/releases)并运行扫描
+```bash
+wget https://github.com/arminc/clair-scanner/releases/download/v12/clair-scanner_linux_amd64
+mv clair-scanner_linux_amd64 clair-scanner
+chmod +x clair-scanner
+clair-scanner DOCKER_IAMGE_NAME example-clair-scanner.yaml http://YOUR_LOCAL_IP:6060 YOUR_LOCAL_IP
+```
+
+
+##### 搭建独立的clair服务在CI/CD过程中进行镜像扫描
 
 # Docker使用中遇到的一些问题
 1. 已知的网络访问BUG：docker+防火墙的bug。docker无法访问本地宿主机网络中的服务(比如数据库)，必须在防火墙设置规则
