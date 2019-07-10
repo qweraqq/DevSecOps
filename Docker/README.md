@@ -55,8 +55,10 @@ clair的部署架构为C/S
 	
 
 
-##### 使用[arminc/clair-local-scan](https://github.com/arminc/clair-local-scan)进行本地Docker镜像扫描
+### 使用[arminc/clair-local-scan](https://github.com/arminc/clair-local-scan)进行本地Docker镜像扫描
 arminc维护了clair所需要的数据库(arminc/clair-db)并且根据官方不再维护的[analyze-local-images](https://github.com/coreos/analyze-local-images.git)开发了[clair-scanner](https://github.com/arminc/clair-scanner)
+
+**注意开放相关的防火墙端口6060(clair server)以及9279(clair-scanner)**
 
 启动clair-local-scan，docker hub地址为[https://hub.docker.com/r/arminc/clair-local-scan](https://hub.docker.com/r/arminc/clair-local-scan)
 ```bash
@@ -73,8 +75,61 @@ chmod +x clair-scanner
 # EXAMPLE: ./clair-scanner --ip=127.0.0.1 -r result.json qweraqq/jenkins-with-maven:lts
 ```
 
+运行效果
+![clair-scanner扫描结果](./screenshots/clair-screenshots.JPG "clair-scanner扫描结果")
 
-##### 搭建独立的clair服务在CI/CD过程中进行镜像扫描
+result.json文件
+```json
+{
+    "image": "qweraqq/jenkins-with-maven:lts",
+    "unapproved": [
+        "CVE-2008-4108",
+        "CVE-2018-5730",
+        "CVE-2018-20217",
+        "CVE-2018-5710",
+        "CVE-2017-11462",
+        "CVE-2018-5729",
+        "CVE-2017-15088",
+        "..."
+    ],
+    "vulnerabilities": [
+        {
+            "featurename": "util-linux",
+            "featureversion": "2.29.2-1+deb9u1",
+            "vulnerability": "CVE-2016-2779",
+            "namespace": "debian:9",
+            "description": "runuser in util-linux allows local users to escape to the parent session via a crafted TIOCSTI ioctl call, which pushes characters to the terminal's input buffer.",
+            "link": "https://security-tracker.debian.org/tracker/CVE-2016-2779",
+            "severity": "High",
+            "fixedby": ""
+        },
+        {
+            "featurename": "mercurial",
+            "featureversion": "4.0-1+deb9u1",
+            "vulnerability": "CVE-2017-17458",
+            "namespace": "debian:9",
+            "description": "In Mercurial before 4.4.1, it is possible that a specially malformed repository can cause Git subrepositories to run arbitrary code in the form of a .git/hooks/post-update script checked into the repository. Typical use of Mercurial prevents construction of such repositories, but they can be created programmatically.",
+            "link": "https://security-tracker.debian.org/tracker/CVE-2017-17458",
+            "severity": "High",
+            "fixedby": ""
+        },
+        { "...." },
+        {
+            "featurename": "unzip",
+            "featureversion": "6.0-21",
+            "vulnerability": "CVE-2019-13232",
+            "namespace": "debian:9",
+            "description": "Info-ZIP UnZip 6.0 mishandles the overlapping of files inside a ZIP container, leading to denial of service (resource consumption), aka a \"better zip bomb\" issue.",
+            "link": "https://security-tracker.debian.org/tracker/CVE-2019-13232",
+            "severity": "Unknown",
+            "fixedby": ""
+        }
+    ]
+}
+```
+
+
+### 搭建独立的clair服务在CI/CD过程中进行镜像扫描
 
 # Docker使用中遇到的一些问题
 1. 已知的网络访问BUG：docker+防火墙的bug。docker无法访问本地宿主机网络中的服务(比如数据库)，必须在防火墙设置规则
